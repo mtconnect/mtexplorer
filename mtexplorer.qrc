@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/Streams.xsl</file>
+        <file>resources/Devices.xsl</file>
+    </qresource>
+</RCC>
