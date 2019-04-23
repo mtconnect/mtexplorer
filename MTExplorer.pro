@@ -48,6 +48,48 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     mtexplorer.qrc
 
+win32 {
+    RC_FILE = platforms/Windows/MTExplorer.rc
+
+    DISTFILES += \
+        platforms/Windows/MTExplorer.ico
+
+    QT_INSTALL_FRAMEWORK_PATH = C:/Qt/QtIFW-3.1.0
+    CONFIG(release, debug|release): QMAKE_POST_LINK = $${PWD}/binaries/Windows/createSetup.bat $${PWD} $${OUT_PWD} ${QTDIR} $${QT_INSTALL_FRAMEWORK_PATH}
+}
+
+macx {
+    ICON = platforms/MacOS/MTExplorer.icns
+    CONFIG(release, debug|release): QMAKE_POST_LINK = cd $${OUT_PWD};${QTDIR}/bin/macdeployqt MTExplorer.app -dmg ; cp -pf MTExplorer.dmg $${PWD}/binaries/MacOS
+}
+
+ios {
+    QMAKE_INFO_PLIST = platforms/ios/Info.plist
+    QMAKE_ASSET_CATALOGS += platforms/ios/Assets.xcassets
+
+    DISTFILES += \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/1024.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/120.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/128.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/152.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/16.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/167.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/180.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/20.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/256.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/29.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/32.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/40.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/512.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/58.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/60.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/64.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/76.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/80.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/87.png \
+        platforms/ios/Assets.xcassets/AppIcon.appiconset/Contents.json
+}
+
 #
 # special setting for Anroid and Windows
 # if agent is accessed via https, it requires openssl library
@@ -60,3 +102,8 @@ contains(ANDROID_TARGET_ARCH, x86) {
         $$PWD/../android-openssl/jni/openssl/arch-x86/lib/libcrypto.so \
         $$PWD/../android-openssl/jni/openssl/arch-x86/lib/libssl.so
 }
+
+
+
+
+
