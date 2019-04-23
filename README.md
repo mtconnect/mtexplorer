@@ -23,7 +23,7 @@ Android
 Building
 -------
 
-Download qt from [qt](https://www.qt.io/download)
+Download and install qt from [qt](https://www.qt.io/download)
 
 Download and install Xcode for iPhone from [Apple](https://developer.apple.com/xcode/)
 
@@ -33,3 +33,8 @@ Open the MTExplorer.pro Qt project file. It should automatically detect the inst
 
 For Android and Windows platform, if the MT agents are using https secure protocol, download openssl from [openssl](https://www.openssl.org/source/). For Android platforms, generate openssl shared libraries based on the target Android's device architect and update MTExplorer.pro to include the location of openssl libraries. For Windows, after the build, add the location of libcrypto.dll and libssl.dll to the PATH system variable and restart Qt.
 
+Binary Releases
+-------
+
+Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/master/binaries/MacOS/MTExplorer.dmg)
+Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/master/binaries/Windows/MTExplorerSetup.zip)
