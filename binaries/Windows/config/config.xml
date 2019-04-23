@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>MTExplorer</Name>
+    <Version>1.0.0</Version>
+    <Title>MTExplorer</Title>
+    <Publisher>Simon Yeung</Publisher>
+    <!-- Directory name is used in component.xml -->
+    <StartMenuDir>MTConnect Tools</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/MTExplorer</TargetDir>
+</Installer>
