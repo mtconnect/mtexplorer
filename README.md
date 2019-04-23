@@ -37,4 +37,5 @@ Binary Releases
 -------
 
 Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/master/binaries/MacOS/MTExplorer.dmg)
+
 Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/master/binaries/Windows/MTExplorerSetup.zip)
