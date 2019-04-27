@@ -35,6 +35,22 @@ MainWindow::MainWindow(QWidget *parent) :
     agentDeviceTree->sortByColumn(0, Qt::AscendingOrder); // column/order to sort by
     agentDeviceTree->setSortingEnabled(true);             // should cause sort on add
 
+    // Set the splitter position to minimize the tree display
+    QSize size = this->size();
+    int windowWidth = size.width();
+
+    QFontMetrics metrics(agentDeviceTree->font());
+
+    // mininum width is 15 characters + some margin
+    int treeWidth = metrics.horizontalAdvance("MMMMMMMMMMMMMMM") + 25;
+
+    QList<int> division;
+
+    division.append(treeWidth);
+    division.append(windowWidth - treeWidth);
+
+    ui->splitter->setSizes(division);
+
     // restore previous agent info
     AgentManager::agentManager.restore();
     map<string, AgentInfo*> &agentList = AgentManager::agentManager.getList();
@@ -177,6 +193,32 @@ void MainWindow::on_actionModify_triggered()
     }
 }
 
+
+void MainWindow::on_actionHide_Panel_triggered()
+{
+    static int lastWindowWidth = 0;
+
+    int treeWidth = 0;
+
+    if (ui->actionHide_Panel->isChecked())
+    {
+        // save the current panel width
+        lastWindowWidth = ui->agentDeviceTree->size().width();
+        treeWidth = 0;
+    }
+    else
+        treeWidth = lastWindowWidth;
+
+    QSize size = this->size();
+    int windowWidth = size.width();
+
+    QList<int> division;
+
+    division.append(treeWidth);
+    division.append(windowWidth - treeWidth);
+    ui->splitter->setSizes(division);
+}
+
 void MainWindow::on_actionRefresh_triggered()
 {
     // refresh the display
@@ -215,6 +257,9 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
 {
     qDebug() << "eventFilter is called: " << event->type() << " " << target->objectName();
 
+    if (isSwipeEvent(target, event))
+        return true;
+
     if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent * keyEvent = static_cast<QKeyEvent*>(event);
@@ -250,11 +295,62 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
         if (QGesture *pinch = guestEvent->gesture(Qt::PinchGesture)) {
 
             QPinchGesture *pinchGesture = static_cast<QPinchGesture *>(pinch);
+
+            qDebug() << "   Pinch gesture event " << pinchGesture->scaleFactor();
             resizeFont(pinchGesture->scaleFactor());
+
+            return true;
         }
-       return true;
     }
 
+
+    return false;
+}
+
+bool MainWindow::isSwipeEvent(QObject *target, QEvent *event)
+{
+    if (event->type() != QEvent::MouseButtonPress &&
+           event->type() != QEvent::MouseButtonRelease)
+        return false;
+
+    static bool Start = false;
+    static int xpos_start = 0;
+    static QElapsedTimer timer;
+
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+    if((event->type() == QEvent::MouseButtonPress) && (Start == false))
+    {
+        Start = true;
+        timer.restart();
+        xpos_start = mouseEvent->pos().x();
+    }
+    else if((event->type() == QEvent::MouseButtonRelease) && (Start == true))
+    {
+        int xpos = mouseEvent->pos().x();
+        int diff_xpos = xpos_start-xpos;
+        qint64 mSec = timer.elapsed();
+
+        Start = false;
+
+        qDebug() << "time: " << mSec << "  distance: " << diff_xpos;
+
+        // 300 pixels typical 200 ms
+        if ((abs(diff_xpos) > 300) && (mSec < 200))
+        {
+            if (diff_xpos < 0)
+            {
+                // swipe right
+                ui->actionHide_Panel->setChecked(false);
+                on_actionHide_Panel_triggered();
+            }
+            else {
+                // swipe left
+                ui->actionHide_Panel->setChecked(true);
+                on_actionHide_Panel_triggered();
+            }
+        }
+        return true;
+    }
 
     return false;
 }
@@ -459,12 +555,6 @@ void MainWindow::initXMLTextEdit(QTextEdit *textEdit)
     textEdit->grabGesture(Qt::PinchGesture);
 
     new XmlSyntaxHighlighter(textEdit->document());
-/**
-    QPalette p = textEdit->palette(); // define pallete for textEdit..
-    p.setColor(QPalette::Base, Qt::black); // set color "black" for textedit base
-    p.setColor(QPalette::Text, Qt::white); // set text color which is selected from color pallete
-    textEdit->setPalette(p); // change textedit palette
-**/
 }
 
 void MainWindow::resizeFont(double scaleFactor)

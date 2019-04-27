@@ -8,7 +8,7 @@
 #include "agentinfo.h"
 #include "requestmanager.h"
 
-#define MTEXPLORER_VERSION "1.0"
+#define MTEXPLORER_VERSION "1.0.1"
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +29,7 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionAdd_triggered();
     void on_actionRemove_triggered();
+    void on_actionHide_Panel_triggered();
 
     void on_actionRefresh_triggered();
     void on_actionDisplay_XML_triggered();
@@ -54,6 +55,7 @@ private:
     void initQXmlQuery(QXmlQuery *&query, QString &styleName);
 
     bool eventFilter(QObject * target, QEvent * event);
+    bool isSwipeEvent(QObject *target, QEvent *event);
     Ui::MainWindow *ui;
     QTreeWidgetItem* lastSelectedDevice;
 };
