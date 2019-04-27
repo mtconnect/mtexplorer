@@ -38,7 +38,10 @@
                         <tbody>
                                 <xsl:for-each select="*">
                                         <tr>
-                                                <td><xsl:value-of select="@timestamp"/></td>
+                                                <td><xsl:value-of select="substring-before(@timestamp,'T')"/>
+                                                    <xsl:text> </xsl:text>
+                                                    <xsl:value-of select="substring-before(substring-after(@timestamp,'T'),'.')"/>
+                                                </td>
                                                 <td><xsl:value-of select="name()"/></td>
                                                 <td><xsl:value-of select="@subType"/></td>
                                                 <td><xsl:value-of select="@name"/></td>
