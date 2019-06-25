@@ -1,7 +1,7 @@
 
 MTExplorer is an UI application to demonstrate the connectivity with MT agents. The info returned from MT agents can be shown in original XML format or translated to HTML with corresponding style sheet. It is designed using Qt (https://www.qt.io/) so it can run in multiple platforms including MacOS, Windows, iPhone and Android devices. 
 
-Here are the screenshots from various platforms:
+Here are some screenshots from various platforms:
 
 MacOS
 
