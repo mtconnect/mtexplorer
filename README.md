@@ -33,9 +33,15 @@ Open the MTExplorer.pro Qt project file. It should automatically detect the inst
 
 For Android and Windows platform, if the MT agents are using https secure protocol, download openssl from [openssl](https://www.openssl.org/source/). For Android platforms, generate openssl shared libraries based on the target Android's device architect and update MTExplorer.pro to include the location of openssl libraries. For Windows, after the build, add the location of libcrypto.dll and libssl.dll to the PATH system variable and restart Qt.
 
-Binary Releases v1.0.0
+v1.1.0 Release Notes
 -------
 
-Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.0.0/binaries/MacOS/MTExplorer.dmg)
+1. Allow XML text to be selectable.
+2. Nicely display XML responses from v1.5 MT Agents
 
-Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.0.0/binaries/Windows/MTExplorerSetup.zip)
+Binary Releases v1.1.0
+-------
+
+Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.0/binaries/MacOS/MTExplorer.dmg)
+
+Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.0/binaries/Windows/MTExplorerSetup.zip)

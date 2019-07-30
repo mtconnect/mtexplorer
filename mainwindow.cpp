@@ -1,8 +1,10 @@
 #include <QXmlQuery>
 #include <QtDebug>
+#include <QDomDocument>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 
 #include "agentdialog.h"
 #include "agentmanager.h"
@@ -503,8 +505,18 @@ void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QText
     QString response = manager->getResponse();
 
     if (ui->actionDisplay_XML->isChecked())
-        textEdit->setText(response);
-    else {
+    {
+        QString xmlOut;
+        QDomDocument output;
+
+        // reformat XML
+        output.setContent(response);
+        QTextStream stream;
+        stream.setString(&xmlOut);
+        output.save(stream, 4); // 4 spaces for indentation
+
+        textEdit->setText(xmlOut);
+    } else {
 
         QUrl xslUrl = QUrl("qrc:/resources/" + formatInfo + ".xsl");
         QXmlQuery query(QXmlQuery::XSLT20);
