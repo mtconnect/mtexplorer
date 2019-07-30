@@ -8,7 +8,7 @@
 #include "agentinfo.h"
 #include "requestmanager.h"
 
-#define MTEXPLORER_VERSION "1.0.1"
+#define MTEXPLORER_VERSION "1.1.0"
 
 namespace Ui {
 class MainWindow;
