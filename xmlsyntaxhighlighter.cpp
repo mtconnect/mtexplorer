@@ -24,6 +24,19 @@ XmlSyntaxHighlighter::XmlSyntaxHighlighter(QTextDocument *parent)
     rule.format = attributeContentFormat;
     highlightingRules.append(rule);
 
+    // jsonContentFormat format
+    jsonKeyFormat.setForeground(QColor(58, 183, 139, 255)); // green
+    rule.pattern = QRegExp("\"[a-zA-Z:]+\":");
+    rule.format = jsonKeyFormat;
+    highlightingRules.append(rule);
+
+    jsonAttributeFormat.setForeground(QColor(66, 122, 244, 255)); // blue
+    jsonAttributeFormat.setFontWeight(QFont::Bold);
+    rule.pattern = QRegExp("(\"[a-zA-Z:]+\": *\\[)|(\"[a-zA-Z:]+\": *\\{)");
+    rule.format = jsonAttributeFormat;
+    highlightingRules.append(rule);
+
+
     commentFormat.setForeground(Qt::lightGray);
     commentFormat.setFontItalic(true);
 

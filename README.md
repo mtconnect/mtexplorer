@@ -39,9 +39,15 @@ v1.1.0 Release Notes
 1. Allow XML text to be selectable.
 2. Nicely display XML responses from v1.5 MT Agents
 
-Binary Releases v1.1.0
+v1.1.1 Release Notes
 -------
 
-Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.0/binaries/MacOS/MTExplorer.dmg)
+1. Support displaying json responses from v1.5 MT Agents
+2. Reorganize the menu items
 
-Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.0/binaries/Windows/MTExplorerSetup.zip)
+Binary Releases v1.1.1
+-------
+
+Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.1/binaries/MacOS/MTExplorer.dmg)
+
+Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.1/binaries/Windows/MTExplorerSetup.zip)

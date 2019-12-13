@@ -8,10 +8,10 @@ class RequestManager: public QObject
 {
     Q_OBJECT
 public:
-    explicit RequestManager(QObject *parent = nullptr);
+    explicit RequestManager(QObject *parent = nullptr, QString header = QString("text/xml"));
 
-    bool request(QUrl url);
-    QString getResponse() { return response; }
+    bool request(QUrl m_url);
+    QString getResponse() { return m_response; }
 
 
 signals:
@@ -25,10 +25,11 @@ private:
     bool isHttpRedirect() const;
     void reportRedirect();
 
-    QUrl url;
-    QNetworkAccessManager manager;
-    QNetworkReply *currentDownload = nullptr;
-    QString response;
+    QUrl m_url;
+    QNetworkAccessManager m_manager;
+    QNetworkReply *m_currentDownload = nullptr;
+    QString m_response;
+    QString m_header;
 };
 
 #endif

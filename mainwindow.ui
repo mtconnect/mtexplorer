@@ -222,6 +222,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -234,12 +237,6 @@
     </property>
     <addaction name="actionAdd"/>
     <addaction name="actionRemove"/>
-    <addaction name="actionHide_Panel"/>
-    <addaction name="separator"/>
-    <addaction name="actionRefresh"/>
-    <addaction name="actionDisplay_XML"/>
-    <addaction name="actionZoom_In"/>
-    <addaction name="actionZoom_Out"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -247,8 +244,28 @@
     </property>
     <addaction name="actionAbout_MTExplorer"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuDisplay">
+     <property name="title">
+      <string>Display</string>
+     </property>
+     <addaction name="actionHTML"/>
+     <addaction name="actionXML"/>
+     <addaction name="actionJSON"/>
+    </widget>
+    <addaction name="menuDisplay"/>
+    <addaction name="actionHide_Panel"/>
+    <addaction name="separator"/>
+    <addaction name="actionRefresh"/>
+    <addaction name="actionZoom_In"/>
+    <addaction name="actionZoom_Out"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionQuit">
@@ -275,23 +292,12 @@
     <string>-</string>
    </property>
   </action>
-  <action name="actionDisplay_XML">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Display XML</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+X</string>
-   </property>
-  </action>
   <action name="actionZoom_In">
    <property name="text">
     <string>Zoom In</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Z</string>
+    <string>Meta++</string>
    </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>true</bool>
@@ -302,7 +308,7 @@
     <string>Zoom Out</string>
    </property>
    <property name="shortcut">
-    <string>Alt+A</string>
+    <string>Meta+-</string>
    </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>false</bool>
@@ -329,7 +335,43 @@
     <string>Hide Panel</string>
    </property>
    <property name="shortcut">
+    <string>Meta+H</string>
+   </property>
+  </action>
+  <action name="actionHTML">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>HTML</string>
+   </property>
+   <property name="shortcut">
     <string>Alt+H</string>
+   </property>
+  </action>
+  <action name="actionXML">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>XML</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+X</string>
+   </property>
+  </action>
+  <action name="actionJSON">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>JSON</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+J</string>
    </property>
   </action>
  </widget>

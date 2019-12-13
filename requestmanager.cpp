@@ -6,22 +6,26 @@
 
 using namespace std;
 
-RequestManager::RequestManager(QObject *parent)
+RequestManager::RequestManager(QObject *parent, QString header)
     : QObject(parent)
 {
-    response = "";
+    m_response = "";
+    m_header = header;
 }
 
 bool RequestManager::request(QUrl aUrl)
 {
-    url = aUrl;
-    QNetworkRequest request(url);
-    currentDownload = manager.get(request);
+    m_url = aUrl;
+    QNetworkRequest request(m_url);
 
-    connect(currentDownload, SIGNAL(readyRead()),
+    request.setRawHeader("Accept", m_header.toUtf8());
+
+    m_currentDownload = m_manager.get(request);
+
+    connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(requestReadyRead()));
 
-    connect(currentDownload, SIGNAL(finished()),
+    connect(m_currentDownload, SIGNAL(finished()),
             SLOT(requestFinished()));
 
     return true;
@@ -30,47 +34,64 @@ bool RequestManager::request(QUrl aUrl)
 
 void RequestManager::requestFinished()
 {
-    if (currentDownload->error()) {
-        qWarning() << "Request Error: " << currentDownload->errorString();
+    if (m_currentDownload->error()) {
+        qWarning() << "Request Error: " << m_currentDownload->errorString();
     } else {
         // check if it was a redirect
         if (isHttpRedirect()) {
             reportRedirect();
-            response = "";
+            m_response = "";
 
-            QUrl lastUrl = currentDownload->request().url();
+            QUrl lastUrl = m_currentDownload->request().url();
 
-            currentDownload->deleteLater();
-            if (lastUrl != url)
-                request(url);
+            m_currentDownload->deleteLater();
+            if (lastUrl != m_url)
+                request(m_url);
             return;
         }
     }
 
-    currentDownload->deleteLater();
+    QList<QNetworkReply::RawHeaderPair> l = m_currentDownload->rawHeaderPairs();
+    int sz = l.count();
+    for(int i = 0; i<sz; i++)
+    {
+        QNetworkReply::RawHeaderPair pair = l[i];
+
+        if (pair.first == "Content-Type")
+        {
+            QString responseHeader = pair.second;
+
+            if (!((m_header.contains("json", Qt::CaseInsensitive) && responseHeader.contains("json", Qt::CaseInsensitive)) ||
+                (m_header.contains("xml", Qt::CaseInsensitive) && responseHeader.contains("xml", Qt::CaseInsensitive))))
+                m_response = "MT Agent does not support request protocol " + m_header;
+            break;
+        }
+    }
+
+    m_currentDownload->deleteLater();
     emit finished();
 }
 
 void RequestManager::requestReadyRead()
 {
-    response += currentDownload->readAll();
+    m_response += m_currentDownload->readAll();
 }
 
 bool RequestManager::isHttpRedirect() const
 {
-    int statusCode = currentDownload->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    int statusCode = m_currentDownload->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     return statusCode == 301 || statusCode == 302 || statusCode == 303
            || statusCode == 305 || statusCode == 307 || statusCode == 308;
 }
 
 void RequestManager::reportRedirect()
 {
-    int statusCode = currentDownload->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    QUrl requestUrl = currentDownload->request().url();
+    int statusCode = m_currentDownload->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    QUrl requestUrl = m_currentDownload->request().url();
     qWarning() << "Request: " << requestUrl.toDisplayString()
                         << " was redirected with code: " << statusCode;
 
-    QVariant target = currentDownload->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    QVariant target = m_currentDownload->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!target.isValid())
         return;
 
@@ -80,5 +101,5 @@ void RequestManager::reportRedirect()
 
     qWarning() << "Redirected to: " << redirectUrl.toDisplayString();
 
-    url = redirectUrl;
+    m_url = redirectUrl;
 }

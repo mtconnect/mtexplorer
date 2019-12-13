@@ -26,6 +26,10 @@ class XmlSyntaxHighlighter : public QSyntaxHighlighter
         QTextCharFormat attributeFormat;
         QTextCharFormat attributeContentFormat;
         QTextCharFormat commentFormat;
+
+        QTextCharFormat jsonAttributeFormat;
+        QTextCharFormat jsonKeyFormat;
+
 };
 
 #endif

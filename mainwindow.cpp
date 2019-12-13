@@ -11,6 +11,7 @@
 #include "requestmanager.h"
 #include "xmlsyntaxhighlighter.h"
 
+
 // todo:
 // android - splitter does not seem to work
 // all - support json display
@@ -21,18 +22,21 @@ static const char *PROMPTMSG = "[Press Ins or + to add new Agent Info]";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    m_ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    ui->agentDeviceTree->clear();
+    setUnifiedTitleAndToolBarOnMac(true);
+    m_requestHeader = QString("text/xml");
 
-    lastSelectedDevice = nullptr;
+    m_ui->setupUi(this);
+    m_ui->agentDeviceTree->clear();
 
-    initXMLTextEdit(ui->textProbe);
-    initXMLTextEdit(ui->textCurrent);
-    initXMLTextEdit(ui->textSample);
+    m_lastSelectedDevice = nullptr;
 
-    QTreeWidget *agentDeviceTree = ui->agentDeviceTree;
+    initXMLTextEdit(m_ui->textProbe);
+    initXMLTextEdit(m_ui->textCurrent);
+    initXMLTextEdit(m_ui->textSample);
+
+    QTreeWidget *agentDeviceTree = m_ui->agentDeviceTree;
     agentDeviceTree->installEventFilter(this);
     agentDeviceTree->sortByColumn(0, Qt::AscendingOrder); // column/order to sort by
     agentDeviceTree->setSortingEnabled(true);             // should cause sort on add
@@ -51,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     division.append(treeWidth);
     division.append(windowWidth - treeWidth);
 
-    ui->splitter->setSizes(division);
+    m_ui->splitter->setSizes(division);
 
     // restore previous agent info
     AgentManager::agentManager.restore();
@@ -81,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -105,9 +109,9 @@ void MainWindow::on_actionAdd_triggered()
         if (agent != nullptr)
         {
             if (AgentManager::agentManager.count() == 1)
-                ui->agentDeviceTree->clear();
+                m_ui->agentDeviceTree->clear();
 
-            QTreeWidgetItem *item = new QTreeWidgetItem(ui->agentDeviceTree);
+            QTreeWidgetItem *item = new QTreeWidgetItem(m_ui->agentDeviceTree);
             item->setText(0, tr(id.c_str()));
 
             // show all the devices
@@ -120,7 +124,7 @@ void MainWindow::on_actionAdd_triggered()
 
 void MainWindow::on_actionRemove_triggered()
 {
-    QTreeWidget *agentDeviceTree = ui->agentDeviceTree;
+    QTreeWidget *agentDeviceTree = m_ui->agentDeviceTree;
     QList<QTreeWidgetItem*> list = agentDeviceTree->selectedItems();
     QList<QTreeWidgetItem*>::iterator i;
     for (i = list.begin(); i != list.end(); ++i)
@@ -166,7 +170,7 @@ void MainWindow::on_actionRemove_triggered()
 
 void MainWindow::on_actionModify_triggered()
 {
-    QTreeWidget *agentDeviceTree = ui->agentDeviceTree;
+    QTreeWidget *agentDeviceTree = m_ui->agentDeviceTree;
     QList<QTreeWidgetItem*> list = agentDeviceTree->selectedItems();
     QList<QTreeWidgetItem*>::iterator i;
     for (i = list.begin(); i != list.end(); ++i)
@@ -190,7 +194,7 @@ void MainWindow::on_actionModify_triggered()
         else {
             // display device info
             showDeviceInfo(item);
-            lastSelectedDevice = item;
+            m_lastSelectedDevice = item;
         }
     }
 }
@@ -202,10 +206,10 @@ void MainWindow::on_actionHide_Panel_triggered()
 
     int treeWidth = 0;
 
-    if (ui->actionHide_Panel->isChecked())
+    if (m_ui->actionHide_Panel->isChecked())
     {
         // save the current panel width
-        lastWindowWidth = ui->agentDeviceTree->size().width();
+        lastWindowWidth = m_ui->agentDeviceTree->size().width();
         treeWidth = 0;
     }
     else
@@ -218,19 +222,46 @@ void MainWindow::on_actionHide_Panel_triggered()
 
     division.append(treeWidth);
     division.append(windowWidth - treeWidth);
-    ui->splitter->setSizes(division);
+    m_ui->splitter->setSizes(division);
 }
 
 void MainWindow::on_actionRefresh_triggered()
 {
     // refresh the display
-    showDeviceInfo(lastSelectedDevice);
+    showDeviceInfo(m_lastSelectedDevice);
 }
 
-void MainWindow::on_actionDisplay_XML_triggered()
+void MainWindow::on_actionHTML_triggered()
 {
+    m_ui->actionHTML->setChecked(true);
+    m_ui->actionXML->setChecked(false);
+    m_ui->actionJSON->setChecked(false);
+
     // refresh the display
-    showDeviceInfo(lastSelectedDevice);
+    m_requestHeader = QString("text/xml");
+    showDeviceInfo(m_lastSelectedDevice);
+}
+
+void MainWindow::on_actionXML_triggered()
+{
+    m_ui->actionHTML->setChecked(false);
+    m_ui->actionXML->setChecked(true);
+    m_ui->actionJSON->setChecked(false);
+
+    // refresh the display
+    m_requestHeader = QString("text/xml");
+    showDeviceInfo(m_lastSelectedDevice);
+}
+
+void MainWindow::on_actionJSON_triggered()
+{
+    m_ui->actionHTML->setChecked(false);
+    m_ui->actionXML->setChecked(false);
+    m_ui->actionJSON->setChecked(true);
+
+    // refresh the display
+    m_requestHeader = QString("application/json");
+    showDeviceInfo(m_lastSelectedDevice);
 }
 
 void MainWindow::on_actionZoom_In_triggered()
@@ -287,7 +318,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
     else if (event->type() == QEvent::MouseButtonDblClick)
     {
         // Double-clicked
-        showDeviceInfo(lastSelectedDevice);
+        showDeviceInfo(m_lastSelectedDevice);
         return true;
     }
     else if (event->type() == QEvent::Gesture)
@@ -342,12 +373,12 @@ bool MainWindow::isSwipeEvent(QObject *target, QEvent *event)
             if (diff_xpos < 0)
             {
                 // swipe right
-                ui->actionHide_Panel->setChecked(false);
+                m_ui->actionHide_Panel->setChecked(false);
                 on_actionHide_Panel_triggered();
             }
             else {
                 // swipe left
-                ui->actionHide_Panel->setChecked(true);
+                m_ui->actionHide_Panel->setChecked(true);
                 on_actionHide_Panel_triggered();
             }
         }
@@ -393,7 +424,7 @@ void MainWindow::modifyAgentDef(QTreeWidgetItem *item)
         if (id.compare(w.id))
         {
             // id changes, replace the one in the display
-            QTreeWidget *agentDeviceTree = ui->agentDeviceTree;
+            QTreeWidget *agentDeviceTree = m_ui->agentDeviceTree;
 
             QTreeWidgetItem *top = agentDeviceTree->invisibleRootItem();
 
@@ -402,7 +433,7 @@ void MainWindow::modifyAgentDef(QTreeWidgetItem *item)
                 top->removeChild(item);
                 delete item;
             }
-            item = new QTreeWidgetItem(ui->agentDeviceTree);
+            item = new QTreeWidgetItem(m_ui->agentDeviceTree);
             item->setText(0, tr(w.id.c_str()));
         }
 
@@ -420,7 +451,7 @@ void MainWindow::displayDevices(QTreeWidgetItem *parent, AgentInfo *agent)
 
     clearAllDeviceInfo();
 
-    RequestManager *manager = new RequestManager;
+    RequestManager *manager = new RequestManager(nullptr, m_requestHeader);
 
     string inputUrl = agent->url + "//";
 
@@ -494,9 +525,9 @@ void MainWindow::showDeviceInfo(QTreeWidgetItem *item)
     AgentInfo *agent = AgentManager::agentManager.search(agentId);
     if (agent)
     {
-        updateDeviceTab(agent, deviceId, "probe", ui->textProbe);
-        updateDeviceTab(agent, deviceId, "current", ui->textCurrent);
-        updateDeviceTab(agent, deviceId, "sample", ui->textSample);
+        updateDeviceTab(agent, deviceId, "probe", m_ui->textProbe);
+        updateDeviceTab(agent, deviceId, "current", m_ui->textCurrent);
+        updateDeviceTab(agent, deviceId, "sample", m_ui->textSample);
     }
 }
 
@@ -504,7 +535,7 @@ void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QText
 {
     QString response = manager->getResponse();
 
-    if (ui->actionDisplay_XML->isChecked())
+    if (m_ui->actionXML->isChecked())
     {
         QString xmlOut;
         QDomDocument output;
@@ -516,7 +547,7 @@ void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QText
         output.save(stream, 4); // 4 spaces for indentation
 
         textEdit->setText(xmlOut);
-    } else {
+    } else if (m_ui->actionHTML->isChecked()) {
 
         QUrl xslUrl = QUrl("qrc:/resources/" + formatInfo + ".xsl");
         QXmlQuery query(QXmlQuery::XSLT20);
@@ -527,6 +558,17 @@ void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QText
         query.evaluateTo(&output);
 
         textEdit->setHtml(output);
+    }
+    else {
+        QJsonDocument json = QJsonDocument::fromJson(response.toUtf8());
+
+        if (json.isEmpty())
+            textEdit->setText(response);
+        else
+        {
+            QString jsonString = json.toJson(QJsonDocument::Indented);
+            textEdit->setText(jsonString);
+        }
     }
 
     if (textEdit->toPlainText().length() == 0)
@@ -542,7 +584,7 @@ void MainWindow::updateDeviceTab(AgentInfo *agent, string deviceId, string reque
     string display = "Retrieving data for " + deviceId + " ...";
     textEdit->setText(display.c_str());
 
-    RequestManager *manager = new RequestManager;
+    RequestManager *manager = new RequestManager(nullptr, m_requestHeader);
 
     string inputUrl = agent->url + "//";
     string deviceUrl = deviceId + "/" + request;
@@ -571,24 +613,24 @@ void MainWindow::initXMLTextEdit(QTextEdit *textEdit)
 
 void MainWindow::resizeFont(double scaleFactor)
 {
-    QFont font = ui->textProbe->font();
+    QFont font = m_ui->textProbe->font();
 
     if ((scaleFactor < 1.0 && font.pointSize() > 5) ||
         (scaleFactor > 1.0 && font.pointSize() < 20))
     {
         font.setPointSizeF(font.pointSizeF() * scaleFactor);
-        ui->textProbe->setFont(font);
-        ui->textSample->setFont(font);
-        ui->textCurrent->setFont(font);
+        m_ui->textProbe->setFont(font);
+        m_ui->textSample->setFont(font);
+        m_ui->textCurrent->setFont(font);
     }
 }
 void MainWindow::clearAllDeviceInfo()
 {
-    ui->textProbe->setText("");
-    ui->textSample->setText("");
-    ui->textCurrent->setText("");
+    m_ui->textProbe->setText("");
+    m_ui->textSample->setText("");
+    m_ui->textCurrent->setText("");
 
-    lastSelectedDevice = nullptr;
+    m_lastSelectedDevice = nullptr;
 }
 
 
