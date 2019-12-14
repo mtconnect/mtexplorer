@@ -297,7 +297,7 @@
     <string>Zoom In</string>
    </property>
    <property name="shortcut">
-    <string>Meta++</string>
+    <string>Alt++</string>
    </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>true</bool>
@@ -308,7 +308,7 @@
     <string>Zoom Out</string>
    </property>
    <property name="shortcut">
-    <string>Meta+-</string>
+    <string>Alt+-</string>
    </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>false</bool>
@@ -335,7 +335,7 @@
     <string>Hide Panel</string>
    </property>
    <property name="shortcut">
-    <string>Meta+H</string>
+    <string>Alt+P</string>
    </property>
   </action>
   <action name="actionHTML">
