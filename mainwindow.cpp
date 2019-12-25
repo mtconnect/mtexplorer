@@ -1,4 +1,4 @@
-#include <QXmlQuery>
+﻿#include <QXmlQuery>
 #include <QtDebug>
 #include <QDomDocument>
 
@@ -527,13 +527,22 @@ void MainWindow::showDeviceInfo(QTreeWidgetItem *item)
     {
         updateDeviceTab(agent, deviceId, "probe", m_ui->textProbe);
         updateDeviceTab(agent, deviceId, "current", m_ui->textCurrent);
-        updateDeviceTab(agent, deviceId, "sample", m_ui->textSample);
     }
 }
 
-void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QTextEdit *textEdit, QString formatInfo)
+void MainWindow::showDeviceInfo(RequestManager *manager, AgentInfo *agent, QTextEdit *textEdit, QString formatInfo, string deviceId, string request)
 {
     QString response = manager->getResponse();
+    if (request.compare("current") == 0)
+    {
+        QRegExp rxlen("\\blastSequence\\s*=\\s*\"(\\d+)\"");
+        int pos = rxlen.indexIn(response);
+        if (pos > -1) {
+            QString sequenceNum = rxlen.cap(1);
+            long s = sequenceNum.toLong() - 1000;
+            updateDeviceTab(agent, deviceId, "sample?count=1000&from="+std::to_string(s), m_ui->textSample);
+        }
+    }
 
     if (m_ui->actionXML->isChecked())
     {
@@ -599,7 +608,7 @@ void MainWindow::updateDeviceTab(AgentInfo *agent, string deviceId, string reque
 
     manager->request(requestUrl);
     QObject::connect(manager, &RequestManager::finished, this,
-                     [=]() { this->showDeviceInfo(manager, agent, textEdit, formatInfo); });
+                     [=]() { this->showDeviceInfo(manager, agent, textEdit, formatInfo, deviceId, request); });
 
 }
 

@@ -50,7 +50,8 @@ private:
     void displayDevices(QTreeWidgetItem *parent, AgentInfo *agent);
     void showDevicesInTree(RequestManager *manager, QTreeWidgetItem *parent, AgentInfo *agent);
     void showDeviceInfo(QTreeWidgetItem *item);
-    void showDeviceInfo(RequestManager *manager, AgentInfo *agent, QTextEdit *textEdit, QString formatInfo);
+    void showDeviceInfo(RequestManager *manager, AgentInfo *agent, QTextEdit *textEdit,
+                        QString formatInfo, string deviceId, string request);
     void updateDeviceTab(AgentInfo *agent, string deviceId, string request, QTextEdit *textEdit);
     void initXMLTextEdit(QTextEdit *textEdit);
     void resizeFont(double scaleFactor);
