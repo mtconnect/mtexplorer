@@ -17,7 +17,7 @@ iPhone
 
 Android
 
-![Android](https://user-images.githubusercontent.com/34289248/56448831-976c9380-62c7-11e9-8ceb-3ef58cf9b4a7.png)
+![Android](https://user-images.githubusercontent.com/34289248/75588239-145eb280-5a2d-11ea-8f61-41fc9106a128.png)
 
 
 
