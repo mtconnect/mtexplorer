@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>MTExplorer</DisplayName>
     <Description>MTExplorer UI for MTConnect Agents</Description>
-    <Version>1.1.1</Version>
-    <ReleaseDate>2019-12-12</ReleaseDate>
+    <Version>1.1.2</Version>
+    <ReleaseDate>2020-02-28</ReleaseDate>
     <Default>true</Default>
     <Script>installscript.qs</Script>
 </Package>
