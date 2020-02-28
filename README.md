@@ -5,19 +5,20 @@ Here are some screenshots from various platforms:
 
 MacOS
 
-![MacOS](https://user-images.githubusercontent.com/34289248/56448657-e3b6d400-62c5-11e9-8d1b-822a500999dd.png)
+![MacOS](https://user-images.githubusercontent.com/34289248/75584988-eaee5880-5a25-11ea-9d91-5f4a5f5a4edf.png)
 
 Windows
 
-![Windows](https://user-images.githubusercontent.com/34289248/56448645-ad795480-62c5-11e9-89e5-c7b10361eecd.png)
+![Windows](https://user-images.githubusercontent.com/34289248/75585891-fe9abe80-5a27-11ea-9764-0abb6eea52ff.png)
 
 iPhone
 
-![iPhone](https://user-images.githubusercontent.com/34289248/56448745-d4845600-62c6-11e9-97e9-816fe69f9a2b.png)
+![iPhone](https://user-images.githubusercontent.com/34289248/75585292-90a1c780-5a26-11ea-8348-c1f42289cd27.png)
 
 Android
 
 ![Android](https://user-images.githubusercontent.com/34289248/56448831-976c9380-62c7-11e9-8ceb-3ef58cf9b4a7.png)
+
 
 
 Building
@@ -45,9 +46,17 @@ v1.1.1 Release Notes
 1. Support displaying json responses from v1.5 MT Agents
 2. Reorganize the menu items
 
-Binary Releases v1.1.1
+v1.1.2 Release Notes
 -------
 
-Download [MacOS Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.1/binaries/MacOS/MTExplorer.dmg)
+1. Move prebuilt binary packages to release tab
+2. Color alternating rows to improve the readability of tables. 
+3. Use different column attributes and colors for Samples/Events/Conditions tables.
 
-Download [Windows Installation](https://raw.githubusercontent.com/mtconnect/mtexplorer/v1.1.1/binaries/Windows/MTExplorerSetup.zip)
+Pre-built Binary Releases
+-------
+
+Windows and MacOS pre-built binaries are available in the release tab:
+
+https://github.com/mtconnect/mtexplorer/releases
+
