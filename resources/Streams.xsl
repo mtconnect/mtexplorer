@@ -29,26 +29,100 @@
                 <br> </br>
         </xsl:template>
 
-        <xsl:template match="*">
+        <xsl:template match="*[local-name()='Condition']">
                 <p><xsl:value-of select="name()"/></p>
                 <table border="1" cellpadding="4" class="data-item">
                         <thead>
-                                <tr><th>Timestamp</th><th>Type</th><th>Sub Type</th><th>Name</th><th>Id</th><th>Sequence</th><th>Value</th></tr>
+                                <tr><th>Timestamp</th><th>Key</th><th>Name</th><th>Type</th><th>Sub Type</th><th>Native Code</th><th>Id</th><th>Sequence</th><th>Value</th></tr>
                         </thead>
                         <tbody>
                                 <xsl:for-each select="*">
-                                        <tr>
-                                                <td><xsl:value-of select="substring-before(@timestamp,'T')"/>
-                                                    <xsl:text> </xsl:text>
-                                                    <xsl:value-of select="substring-before(substring-after(@timestamp,'T'),'.')"/>
-                                                </td>
-                                                <td><xsl:value-of select="name()"/></td>
-                                                <td><xsl:value-of select="@subType"/></td>
-                                                <td><xsl:value-of select="@name"/></td>
-                                                <td><xsl:value-of select="@dataItemId"/></td>
-                                                <td><xsl:value-of select="@sequence"/></td>
-                                                <td><xsl:value-of select="."/></td>
-                                        </tr>
+                                    <xsl:variable name="altColor">
+                                        <xsl:choose>
+                                            <xsl:when test="position() mod 2 = 0">#FFFFFF</xsl:when>
+                                            <xsl:otherwise>#FF6F33</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <tr bgcolor="{$altColor}">
+                                        <td><xsl:value-of select="substring-before(@timestamp,'T')"/>
+                                            <xsl:text> </xsl:text>
+                                            <xsl:value-of select="substring-before(substring-after(@timestamp,'T'),'.')"/>
+                                        </td>
+                                        <td><xsl:value-of select="name()"/></td>
+                                        <td><xsl:value-of select="@name"/></td>
+                                        <td><xsl:value-of select="@type"/></td>
+                                        <td><xsl:value-of select="@subType"/></td>
+                                        <td><xsl:value-of select="@nativeCode"/></td>
+                                        <td><xsl:value-of select="@dataItemId"/></td>
+                                        <td><xsl:value-of select="@sequence"/></td>
+                                        <td><xsl:value-of select="."/></td>
+                                    </tr>
+                                </xsl:for-each>
+                        </tbody>
+                </table>
+        </xsl:template>
+
+
+        <xsl:template match="*[local-name()='Events']">
+                <p><xsl:value-of select="name()"/></p>
+                <table border="1" cellpadding="4" class="data-item">
+                        <thead>
+                                <tr><th>Timestamp</th><th>Key</th><th>Name</th><th>Sub Type</th><th>Comp Id</th><th>Id</th><th>Sequence</th><th>Value</th></tr>
+                        </thead>
+                        <tbody>
+                                <xsl:for-each select="*">
+                                    <xsl:variable name="altColor">
+                                        <xsl:choose>
+                                            <xsl:when test="position() mod 2 = 0">#FFFFFF</xsl:when>
+                                            <xsl:otherwise>#DFE45B</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <tr bgcolor="{$altColor}">
+                                        <td><xsl:value-of select="substring-before(@timestamp,'T')"/>
+                                            <xsl:text> </xsl:text>
+                                            <xsl:value-of select="substring-before(substring-after(@timestamp,'T'),'.')"/>
+                                        </td>
+                                        <td><xsl:value-of select="name()"/></td>
+                                        <td><xsl:value-of select="@name"/></td>
+                                        <td><xsl:value-of select="@subType"/></td>
+                                        <td><xsl:value-of select="@compositionId"/></td>
+                                        <td><xsl:value-of select="@dataItemId"/></td>
+                                        <td><xsl:value-of select="@sequence"/></td>
+                                        <td><xsl:value-of select="."/></td>
+                                    </tr>
+                                </xsl:for-each>
+                        </tbody>
+                </table>
+        </xsl:template>
+
+        <xsl:template match="*[local-name()='Samples']">
+                <p><xsl:value-of select="name()"/></p>
+                <table border="1" cellpadding="4" class="data-item">
+                        <thead>
+                                <tr><th>Timestamp</th><th>Key</th><th>Name</th><th>Type</th><th>Sub Type</th><th>Comp Id</th><th>Id</th><th>Sequence</th><th>Value</th></tr>
+                        </thead>
+                        <tbody>
+                                <xsl:for-each select="*">
+                                    <xsl:variable name="altColor">
+                                        <xsl:choose>
+                                            <xsl:when test="position() mod 2 = 0">#FFFFFF</xsl:when>
+                                            <xsl:otherwise>#D3DFEE</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <tr bgcolor="{$altColor}">
+                                        <td><xsl:value-of select="substring-before(@timestamp,'T')"/>
+                                            <xsl:text> </xsl:text>
+                                            <xsl:value-of select="substring-before(substring-after(@timestamp,'T'),'.')"/>
+                                        </td>
+                                        <td><xsl:value-of select="name()"/></td>
+                                        <td><xsl:value-of select="@name"/></td>
+                                        <td><xsl:value-of select="@type"/></td>
+                                        <td><xsl:value-of select="@subType"/></td>
+                                        <td><xsl:value-of select="@compositionId"/></td>
+                                        <td><xsl:value-of select="@dataItemId"/></td>
+                                        <td><xsl:value-of select="@sequence"/></td>
+                                        <td><xsl:value-of select="."/></td>
+                                    </tr>
                                 </xsl:for-each>
                         </tbody>
                 </table>

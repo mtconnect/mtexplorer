@@ -32,25 +32,31 @@
         <xsl:template match="*[local-name()='DataItems']">
                 <table border="1" cellpadding="4" class="data-item">
                         <thead>
-                                <tr><th>Category</th><th>Type</th><th>Sub Type</th><th>Id</th><th>Name</th>
-                                         <th>Units</th><th>Native Units</th><th>Representation</th><th>Sample Rate</th><th>Native Scale</th><th>Statistic</th></tr>
+                            <tr><th>Category</th><th>Type</th><th>Sub Type</th><th>Id</th><th>Name</th>
+                                     <th>Units</th><th>Native Units</th><th>Representation</th><th>Sample Rate</th><th>Native Scale</th><th>Statistic</th></tr>
                         </thead>
                         <tbody>
-                                <xsl:for-each select="./*[local-name()='DataItem']">
-                                        <tr>
-                                                <td><xsl:value-of select="@category" /></td>
-                                                <td><xsl:value-of select="@type" /></td>
-                                                <td><xsl:value-of select="@subType" /></td>
-                                                <td><xsl:value-of select="@id" /></td>
-                                                <td><xsl:value-of select="@name" /></td>
-                                                <td><xsl:value-of select="@units" /></td>
-                                                <td><xsl:value-of select="@nativeUnits" /></td>
-                                                <td><xsl:value-of select="@representation" /></td>
-                                                <td><xsl:value-of select="@sampleRate" /></td>
-                                                <td><xsl:value-of select="@nativeScale" /></td>
-                                                <td><xsl:value-of select="@statistic" /></td>
-                                        </tr>
-                                </xsl:for-each>
+                            <xsl:for-each select="./*[local-name()='DataItem']">
+                                <xsl:variable name="altColor">
+                                    <xsl:choose>
+                                        <xsl:when test="position() mod 2 = 0">#FFFFFF</xsl:when>
+                                        <xsl:otherwise>#D3DFEE</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
+                                <tr bgcolor="{$altColor}">
+                                    <td><xsl:value-of select="@category" /></td>
+                                    <td><xsl:value-of select="@type" /></td>
+                                    <td><xsl:value-of select="@subType" /></td>
+                                    <td><xsl:value-of select="@id" /></td>
+                                    <td><xsl:value-of select="@name" /></td>
+                                    <td><xsl:value-of select="@units" /></td>
+                                    <td><xsl:value-of select="@nativeUnits" /></td>
+                                    <td><xsl:value-of select="@representation" /></td>
+                                    <td><xsl:value-of select="@sampleRate" /></td>
+                                    <td><xsl:value-of select="@nativeScale" /></td>
+                                    <td><xsl:value-of select="@statistic" /></td>
+                                </tr>
+                            </xsl:for-each>
                         </tbody>
                 </table>
                 <br>  </br>
