@@ -1,3 +1,12 @@
+MTExplorer is now under further development with [Metalogi LLC](https://www.metalogi.io). It is now called Metalogi MetaStudio. A [FREE new release](https://www.metalogi.io/download) is now available with many new improvements. Combined with Metalogi MetaAgent, you can manage and reconfigure your MTConnect Agents and immediately provide MTConnect, OPC UA and NC-Link interfaces to your applications. Give it a try and we love to hear from you and further contribute to our MTConnect Community.
+----
+
+![MetaStudio-Mac-2](https://user-images.githubusercontent.com/34289248/142936784-dfbeb8e5-64c8-46bd-9b4d-36b6914a34ef.png)
+----
+
+
+
+
 
 MTExplorer is an UI application to demonstrate the connectivity with MT agents. The info returned from MT agents can be shown in original XML format or translated to HTML with corresponding style sheet. It is designed using Qt (https://www.qt.io/) so it can run in multiple platforms including MacOS, Windows, iPhone and Android devices. 
 
